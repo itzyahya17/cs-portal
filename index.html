@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║                  CS PORTAL — COMSATS University                  ║
+  ║                       Spring 2026 Edition                        ║
+  ╠══════════════════════════════════════════════════════════════════╣
+  ║  Description : Student academic resource portal for BCS program  ║
+  ║  Sections    : Auth (Login / Forgot / Reset) + Dashboard         ║
+  ║  Features    : Subject browsing, folder navigation, file upload  ║
+  ║                with admin approval workflow, search, breadcrumbs ║
+  ║  Admin login : admin@gmail.com (any password)                    ║
+  ║  Student     : any other email (any password)                    ║
+  ╚══════════════════════════════════════════════════════════════════╝
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CS Portal — COMSATS University</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Fonts: Syne (headings) · DM Sans (body) · Space Mono (mono accents) -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- Ambient background orbs -->
+  <div class="mesh mesh-1"></div>
+  <div class="mesh mesh-2"></div>
+
+
+  <!-- ════════════════════════════════════════════════════════════
+       AUTH PAGE 1 — LOGIN
+       ════════════════════════════════════════════════════════════ -->
+  <div id="loginPage" class="auth-page">
+
+    <div class="auth-left">
+      <div class="auth-left-bg"></div>
+      <div class="auth-grid"></div>
+      <div class="auth-orb auth-orb-1"></div>
+      <div class="auth-orb auth-orb-2"></div>
+      <div class="auth-orb auth-orb-3"></div>
+      <div class="auth-scan"></div>
+      <div class="auth-nodes">
+        <div class="node" style="top:22%;left:18%;animation-delay:0s"></div>
+        <div class="node" style="top:55%;left:42%;animation-delay:1.2s"></div>
+        <div class="node" style="top:35%;left:70%;animation-delay:2.4s"></div>
+        <div class="node" style="top:72%;left:28%;animation-delay:0.8s"></div>
+        <div class="node" style="top:15%;left:65%;animation-delay:3s"></div>
+        <div class="node" style="top:80%;left:62%;animation-delay:1.8s"></div>
+      </div>
+      <div class="auth-left-content">
+        <div class="auth-eyebrow">COMSATS University Islamabad</div>
+        <div class="auth-headline">
+          <div class="hl-white">Academic</div>
+          <div class="hl-grad">Resource</div>
+          <div class="hl-white">Portal.</div>
+        </div>
+        <p class="auth-desc">Your unified hub for course materials, assignments, past papers, and everything you need to ace the semester.</p>
+        <div class="auth-stats">
+          <div class="auth-stat">
+            <div class="auth-stat-num">8</div>
+            <div class="auth-stat-label">Subjects</div>
+          </div>
+          <div class="auth-stat">
+            <div class="auth-stat-num">6</div>
+            <div class="auth-stat-label">Folders each</div>
+          </div>
+          <div class="auth-stat">
+            <div class="auth-stat-num" id="loginFileCount">0</div>
+            <div class="auth-stat-label">Resources</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-divider"></div>
+
+    <div class="auth-right">
+      <div class="auth-form-wrap">
+        <div class="form-logo">
+          <div class="form-logo-mark">CS</div>
+          <div>
+            <div class="form-logo-text">CS Portal</div>
+            <div class="form-logo-sub">Spring 2026</div>
+          </div>
+        </div>
+        <div class="form-title">Welcome back</div>
+        <div class="form-sub">Sign in to access your academic resources</div>
+        <div class="auth-card">
+          <div class="field-label">Email address</div>
+          <div class="field">
+            <span class="field-icon">✉</span>
+            <input class="inp" id="loginEmail" type="email" placeholder="you@university.edu">
+          </div>
+          <div class="field-label">Password</div>
+          <div class="field">
+            <span class="field-icon">🔒</span>
+            <input class="inp" id="loginPass" type="password" placeholder="••••••••">
+          </div>
+          <button class="login-btn" onclick="login()">Sign In</button>
+          <div class="forgot-wrap">
+            <span class="forgot-label">Forgot your password?</span>
+            <span class="forgot-link" onclick="showForgot()">Reset it</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /loginPage -->
+
+
+  <!-- ════════════════════════════════════════════════════════════
+       AUTH PAGE 2 — FORGOT PASSWORD
+       ════════════════════════════════════════════════════════════ -->
+  <div id="forgotPage" class="auth-page hidden">
+
+    <div class="auth-left">
+      <div class="auth-left-bg"></div>
+      <div class="auth-grid"></div>
+      <div class="auth-orb auth-orb-1"></div>
+      <div class="auth-orb auth-orb-2"></div>
+      <div class="auth-scan"></div>
+      <div class="auth-left-content">
+        <div class="auth-eyebrow">Account Recovery</div>
+        <div class="auth-headline">
+          <div class="hl-white">Forgot</div>
+          <div class="hl-grad">your</div>
+          <div class="hl-white">password?</div>
+        </div>
+        <p class="auth-desc">No worries — we'll send a secure reset link straight to your inbox so you can get back in seconds.</p>
+      </div>
+    </div>
+
+    <div class="auth-divider"></div>
+
+    <div class="auth-right">
+      <div class="auth-form-wrap">
+        <div class="form-logo">
+          <div class="form-logo-mark">CS</div>
+          <div>
+            <div class="form-logo-text">CS Portal</div>
+            <div class="form-logo-sub">Spring 2026</div>
+          </div>
+        </div>
+        <div class="form-title">Reset password</div>
+        <div class="form-sub">Enter your email to receive a reset link</div>
+        <div class="auth-card">
+          <div id="forgotStep1">
+            <div class="field-label">Your email address</div>
+            <div class="field">
+              <span class="field-icon">✉</span>
+              <input class="inp" id="resetEmail" type="email" placeholder="you@university.edu">
+            </div>
+            <div class="info-box" id="forgotMsg"></div>
+            <button class="login-btn" onclick="sendReset()">Send Reset Link</button>
+          </div>
+          <div class="sent-box" id="forgotStep2">
+            <div class="sent-icon">📬</div>
+            <div class="sent-title">Check your inbox</div>
+            <div class="sent-sub">Reset link sent to<br><span class="sent-email" id="sentToEmail"></span></div>
+            <button class="login-btn" onclick="showLogin()">Back to Login</button>
+          </div>
+          <div class="forgot-wrap">
+            <span class="forgot-label">Remember it?</span>
+            <span class="forgot-link" onclick="showLogin()">Back to login</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /forgotPage -->
+
+
+  <!-- ════════════════════════════════════════════════════════════
+       AUTH PAGE 3 — RESET PASSWORD
+       ════════════════════════════════════════════════════════════ -->
+  <div id="resetPage" class="auth-page hidden">
+
+    <div class="auth-left">
+      <div class="auth-left-bg"></div>
+      <div class="auth-grid"></div>
+      <div class="auth-orb auth-orb-1"></div>
+      <div class="auth-orb auth-orb-3"></div>
+      <div class="auth-scan"></div>
+      <div class="auth-left-content">
+        <div class="auth-eyebrow">Set New Password</div>
+        <div class="auth-headline">
+          <div class="hl-white">New</div>
+          <div class="hl-grad">password,</div>
+          <div class="hl-white">fresh start.</div>
+        </div>
+        <p class="auth-desc">Choose a strong password you haven't used before. You'll be back inside in moments.</p>
+      </div>
+    </div>
+
+    <div class="auth-divider"></div>
+
+    <div class="auth-right">
+      <div class="auth-form-wrap">
+        <div class="form-logo">
+          <div class="form-logo-mark">CS</div>
+          <div>
+            <div class="form-logo-text">CS Portal</div>
+            <div class="form-logo-sub">Spring 2026</div>
+          </div>
+        </div>
+        <div class="form-title">New password</div>
+        <div class="form-sub">Set a new password for your account</div>
+        <div class="auth-card">
+          <div class="field-label">Account</div>
+          <div class="field">
+            <span class="field-icon">👤</span>
+            <input class="inp" id="resetAccount" type="text" readonly>
+          </div>
+          <div class="field-label">New Password</div>
+          <div class="field">
+            <span class="field-icon">🔒</span>
+            <input class="inp" id="newPass" type="password" placeholder="Min. 8 characters">
+          </div>
+          <div class="field-label">Confirm Password</div>
+          <div class="field">
+            <span class="field-icon">🔒</span>
+            <input class="inp" id="confirmPass" type="password" placeholder="Repeat your password">
+          </div>
+          <div class="info-box" id="resetMsg"></div>
+          <button class="login-btn" onclick="doReset()">Set New Password</button>
+          <div class="forgot-wrap">
+            <span class="forgot-label">Changed your mind?</span>
+            <span class="forgot-link" onclick="showLogin()">Back to login</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /resetPage -->
+
+
+  <!-- ════════════════════════════════════════════════════════════
+       DASHBOARD
+       ════════════════════════════════════════════════════════════ -->
+  <div id="dashboard" class="hidden">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-dot"></span> CS Portal
+      </div>
+
+      <div class="nav-section" style="margin-bottom:10px">Navigation</div>
+
+      <div class="nav-item active" id="navHome" onclick="goHome()">
+        <span class="nav-icon">⬡</span> Subjects
+      </div>
+
+      <div class="nav-item hidden" id="navAdmin" onclick="showAdmin()">
+        <span class="nav-icon">🔔</span> Admin Panel
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="user-chip" onclick="toggleUserMenu()">
+          <div class="avatar" id="avatarEl">U</div>
+          <div class="user-info">
+            <div class="user-name" id="userNameEl">User</div>
+            <div class="user-role" id="userRoleEl">Student</div>
+          </div>
+          <span id="menuArrow" style="color:var(--muted);font-size:11px;">▲</span>
+        </div>
+        <div class="user-menu" id="userMenu">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;">Signed in as</div>
+          <div id="userEmailEl" style="font-size:13px;font-weight:500;margin-bottom:12px;word-break:break-all;"></div>
+          <button class="btn btn-ghost" onclick="logout()" style="width:100%;text-align:center;color:var(--danger);border-color:rgba(244,63,94,0.2);">
+            🚪 Logout
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+
+      <div class="topbar">
+        <div>
+          <div class="page-title" id="pageTitle">All Subjects</div>
+          <div class="breadcrumb" id="breadcrumb">CS Portal / <span>Subjects</span></div>
+        </div>
+        <div class="topbar-right">
+          <div class="search-bar">
+            <span style="color:var(--muted);font-size:14px;">⌕</span>
+            <input placeholder="Search files..." oninput="searchFiles(this.value)">
+          </div>
+          <button class="btn btn-ghost" id="backBtn" onclick="goBack()" style="display:none">Back</button>
+        </div>
+      </div>
+
+      <div id="statsRow" class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num">8</div>
+          <div class="stat-label">Subjects enrolled</div>
+          <div class="stat-badge badge-blue">Spring 2026</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">6</div>
+          <div class="stat-label">Resource folders</div>
+          <div class="stat-badge badge-green">Per subject</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="fileCount">0</div>
+          <div class="stat-label">Files available</div>
+          <div class="stat-badge badge-cyan">Growing</div>
+        </div>
+      </div>
+
+      <div id="content"></div>
+
+    </div><!-- /main -->
+  </div><!-- /dashboard -->
+
+
+  <!-- Persistent file input (kept outside dynamic HTML) -->
+  <input type="file" id="globalFileInput" style="display:none" onchange="upload()">
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast">
+    <div class="toast-dot" id="toastDot" style="background:var(--success)"></div>
+    <span id="toastMsg">Done!</span>
+  </div>
+
+
+  <!-- ════════════════════════════════════════════════════════════
+       JS — load order matters:
+         1. data.js    (state + raw data arrays)
+         2. utils.js   (id(), showToast, etc.)
+         3. nav.js     (goHome, breadcrumbs — needs id())
+         4. render.js  (renderSubjects etc — needs nav + data)
+         5. files.js   (upload, approve — needs render)
+         6. admin.js   (showAdmin — needs files + render)
+         7. auth.js    (login — needs all of the above)
+       ════════════════════════════════════════════════════════════ -->
+  <script src="js/data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/files.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/auth.js"></script>
+
+</body>
+</html>
