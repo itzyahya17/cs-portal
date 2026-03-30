@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CS Portal — COMSATS University Islamabad</title>
+  <meta name="description" content="Academic resource portal for BCS students at COMSATS University Islamabad. Browse course materials, exam papers, assignments and more.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07080d">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- SPLASH -->
+  <div id="splashScreen" class="splash">
+    <div class="splash-inner">
+      <div class="splash-logo">
+        <div class="splash-mark">CS</div>
+        <div>
+          <div class="splash-title">CS Portal</div>
+          <div class="splash-sub">Loading your workspace...</div>
+        </div>
+      </div>
+      <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+    </div>
+  </div>
+
+  <div class="mesh mesh-1"></div>
+  <div class="mesh mesh-2"></div>
+
+  <!-- ═══════════ LOGIN ═══════════ -->
+  <div id="loginPage" class="auth-page hidden">
+    <div class="auth-left">
+      <canvas id="particleCanvas" class="particle-canvas"></canvas>
+      <div class="auth-left-content">
+        <div class="auth-eyebrow">COMSATS University Islamabad</div>
+        <div class="auth-headline">
+          <div class="hl-white">Academic</div>
+          <div class="hl-grad">Resource</div>
+          <div class="hl-white">Portal.</div>
+        </div>
+        <p class="auth-desc">Your unified hub for 8 semesters of course materials, exam papers, assignments, and everything you need to ace the degree.</p>
+        <div class="auth-stats">
+          <div class="auth-stat"><div class="auth-stat-num">8</div><div class="auth-stat-label">Semesters</div></div>
+          <div class="auth-stat"><div class="auth-stat-num">4</div><div class="auth-stat-label">Years</div></div>
+          <div class="auth-stat"><div class="auth-stat-num">BCS</div><div class="auth-stat-label">Program</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="auth-divider"></div>
+    <div class="auth-right">
+      <div class="auth-form-wrap">
+        <div class="form-logo"><div class="form-logo-mark">CS</div><div><div class="form-logo-text">CS Portal</div><div class="form-logo-sub">BCS · Computer Science</div></div></div>
+        <div class="form-title">Welcome back</div>
+        <div class="form-sub">Sign in to access your academic resources</div>
+        <div class="auth-card">
+          <div class="field-label">Email address</div>
+          <div class="field"><span class="field-icon">✉</span><input class="inp" id="loginEmail" type="email" placeholder="you@university.edu"></div>
+          <div class="field-label">Password</div>
+          <div class="field"><span class="field-icon">🔒</span><input class="inp" id="loginPass" type="password" placeholder="••••••••"></div>
+          <button class="login-btn" id="loginBtn" onclick="login()">Sign In</button>
+          <div class="forgot-wrap">
+            <span class="forgot-label">Don't have an account?</span>
+            <span class="forgot-link" onclick="showSignup()">Sign Up</span>
+          </div>
+          <div class="forgot-wrap" style="margin-top:4px;padding-top:0">
+            <span class="forgot-label">Forgot password?</span>
+            <span class="forgot-link" onclick="showForgot()">Reset it</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ SIGNUP ═══════════ -->
+  <div id="signupPage" class="auth-page hidden">
+    <div class="auth-left">
+      <canvas id="particleCanvas2" class="particle-canvas"></canvas>
+      <div class="auth-left-content">
+        <div class="auth-eyebrow">Join the Community</div>
+        <div class="auth-headline">
+          <div class="hl-white">Create</div>
+          <div class="hl-grad">your</div>
+          <div class="hl-white">account.</div>
+        </div>
+        <p class="auth-desc">Sign up and an admin will review your request. Once approved, you'll have full access.</p>
+        <div class="auth-stats">
+          <div class="auth-stat"><div class="auth-stat-num">1</div><div class="auth-stat-label">Sign Up</div></div>
+          <div class="auth-stat"><div class="auth-stat-num">2</div><div class="auth-stat-label">Get Approved</div></div>
+          <div class="auth-stat"><div class="auth-stat-num">3</div><div class="auth-stat-label">Start Learning</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="auth-divider"></div>
+    <div class="auth-right">
+      <div class="auth-form-wrap">
+        <div class="form-logo"><div class="form-logo-mark">CS</div><div><div class="form-logo-text">CS Portal</div><div class="form-logo-sub">New Account</div></div></div>
+        <div class="form-title">Create account</div>
+        <div class="form-sub">Fill in your details — admin approval is required</div>
+        <div class="auth-card">
+          <div class="field-label">Full name</div>
+          <div class="field"><span class="field-icon">👤</span><input class="inp" id="signupName" type="text" placeholder="Muhammad Ahmad"></div>
+          <div class="field-label">Email address</div>
+          <div class="field"><span class="field-icon">✉</span><input class="inp" id="signupEmail" type="email" placeholder="you@university.edu"></div>
+          <div class="field-label">Password</div>
+          <div class="field"><span class="field-icon">🔒</span><input class="inp" id="signupPass" type="password" placeholder="Min. 6 characters"></div>
+          <div class="field-label">Confirm password</div>
+          <div class="field"><span class="field-icon">🔒</span><input class="inp" id="signupConfirm" type="password" placeholder="Repeat password"></div>
+          <div class="info-box" id="signupMsg"></div>
+          <button class="login-btn" id="signupBtn" onclick="signup()">Create Account</button>
+          <div class="forgot-wrap">
+            <span class="forgot-label">Already have an account?</span>
+            <span class="forgot-link" onclick="showLogin()">Sign In</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ FORGOT PASSWORD ═══════════ -->
+  <div id="forgotPage" class="auth-page hidden">
+    <div class="auth-left">
+      <canvas class="particle-canvas"></canvas>
+      <div class="auth-left-content">
+        <div class="auth-eyebrow">Account Recovery</div>
+        <div class="auth-headline">
+          <div class="hl-white">Forgot</div>
+          <div class="hl-grad">your</div>
+          <div class="hl-white">password?</div>
+        </div>
+        <p class="auth-desc">Contact your admin to reset your password.</p>
+      </div>
+    </div>
+    <div class="auth-divider"></div>
+    <div class="auth-right">
+      <div class="auth-form-wrap">
+        <div class="form-logo"><div class="form-logo-mark">CS</div><div><div class="form-logo-text">CS Portal</div><div class="form-logo-sub">Password Recovery</div></div></div>
+        <div class="form-title">Reset password</div>
+        <div class="form-sub">Contact your portal admin for a password reset</div>
+        <div class="auth-card">
+          <div id="forgotStep1">
+            <div class="field-label">Your email address</div>
+            <div class="field"><span class="field-icon">✉</span><input class="inp" id="resetEmail" type="email" placeholder="you@university.edu"></div>
+            <div class="info-box" id="forgotMsg"></div>
+            <button class="login-btn" onclick="sendReset()">Request Reset</button>
+          </div>
+          <div class="sent-box" id="forgotStep2">
+            <div class="sent-icon">📬</div>
+            <div class="sent-title">Request Submitted</div>
+            <div class="sent-sub">Your admin has been notified for<br><span class="sent-email" id="sentToEmail"></span></div>
+            <button class="login-btn" onclick="showLogin()">Back to Login</button>
+          </div>
+          <div class="forgot-wrap"><span class="forgot-label">Remember it?</span><span class="forgot-link" onclick="showLogin()">Back to login</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ DASHBOARD ═══════════ -->
+  <div id="dashboard" class="hidden">
+    <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeMobileSidebar()"></div>
+
+    <div class="sidebar">
+      <div class="sidebar-logo"><span class="logo-dot"></span> CS Portal</div>
+
+      <div class="nav-section">Navigation</div>
+
+      <div class="nav-item active" id="navHome" onclick="goHome(); closeMobileSidebar();">
+        <span class="nav-icon">📚</span> <span class="nav-label">Subjects</span>
+      </div>
+      <div class="nav-item" id="navExam" onclick="showExamCentre(); closeMobileSidebar();">
+        <span class="nav-icon">📝</span> <span class="nav-label">Exam Centre</span>
+      </div>
+      <div class="nav-item" id="navAnnounce" onclick="showAnnouncements(); closeMobileSidebar();">
+        <span class="nav-icon">📢</span> <span class="nav-label">Announcements</span>
+      </div>
+      <div class="nav-item" id="navUploads" onclick="showMyUploads(); closeMobileSidebar();">
+        <span class="nav-icon">📤</span> <span class="nav-label">My Uploads</span>
+      </div>
+      <div class="nav-item hidden" id="navAdmin" onclick="showAdmin(); closeMobileSidebar();">
+        <span class="nav-icon">🛡️</span>
+        <span class="nav-label">Admin Panel</span>
+        <span class="admin-badge" id="adminBadge" style="display:none">0</span>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="user-chip" onclick="toggleUserMenu()">
+          <div class="avatar" id="avatarEl">U</div>
+          <div class="user-info">
+            <div class="user-name" id="userNameEl">User</div>
+            <div class="user-role" id="userRoleEl">Student</div>
+          </div>
+          <span id="menuArrow" style="color:var(--muted);font-size:11px;">▲</span>
+        </div>
+        <div class="user-menu" id="userMenu">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;">Signed in as</div>
+          <div id="userEmailEl" style="font-size:13px;font-weight:500;margin-bottom:12px;word-break:break-all;"></div>
+          <button class="btn btn-ghost" onclick="logout()" style="width:100%;text-align:center;color:var(--danger);border-color:rgba(244,63,94,0.2);">🚪 Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileSidebar()"><span></span><span></span><span></span></button>
+
+      <div class="topbar">
+        <div>
+          <div class="page-title" id="pageTitle">All Subjects</div>
+          <div class="breadcrumb" id="breadcrumb">CS Portal</div>
+        </div>
+        <div class="topbar-right">
+          <div class="search-bar" id="searchBar">
+            <span style="color:var(--muted);font-size:14px;">⌕</span>
+            <input placeholder="Search files... (Ctrl+K)" oninput="searchFiles(this.value)">
+          </div>
+          <button class="btn btn-ghost" id="backBtn" onclick="goBack()" style="display:none">← Back</button>
+        </div>
+      </div>
+
+      <div id="statsRow" class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num" id="statSubjects">0</div>
+          <div class="stat-label">Subjects enrolled</div>
+          <div class="stat-badge badge-blue">Semester 1</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="statCredits">0</div>
+          <div class="stat-label">Credit hours</div>
+          <div class="stat-badge badge-green">Spring 2026</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="statFiles">0</div>
+          <div class="stat-label">Resources available</div>
+          <div class="stat-badge badge-cyan">Growing</div>
+        </div>
+      </div>
+
+      <div id="content"></div>
+    </div>
+  </div>
+
+  <!-- GLOBALS -->
+  <input type="file" id="globalFileInput" style="display:none" onchange="handleFileSelect()">
+
+  <div class="toast" id="toast">
+    <div class="toast-dot" id="toastDot" style="background:var(--success)"></div>
+    <span id="toastMsg">Done!</span>
+  </div>
+
+  <div class="modal-wrap" id="confirmModal">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-box">
+      <div class="modal-title" id="modalTitle">Confirm</div>
+      <div class="modal-message" id="modalMessage">Are you sure?</div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="modalCancel">Cancel</button>
+        <button class="login-btn" id="modalConfirm" style="width:auto;padding:10px 24px;margin-top:0">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS (order matters) -->
+  <script src="js/data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/files.js"></script>
+  <script src="js/exam.js"></script>
+  <script src="js/announcements.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
