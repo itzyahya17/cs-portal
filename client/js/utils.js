@@ -6,7 +6,7 @@
 // In development (localhost), use the local Express server.
 const API_URL = window.location.hostname === 'localhost'
   ? '/api'
-  : 'https://cs-portal-ij8faw1ze-numankabir100-2643s-projects.vercel.app/api';
+  : 'https://cs-portal-bck.vercel.app/api';
 
 /** Shorthand for getElementById */
 function id(x) { return document.getElementById(x); }
