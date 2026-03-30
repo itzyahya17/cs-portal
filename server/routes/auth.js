@@ -116,6 +116,43 @@ router.post('/login', async (req, res) => {
   }
 });
 
+/**
+ * POST /api/auth/request-reset
+ * Flags a user's account for a password reset request.
+ */
+router.post('/request-reset', async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+
+  try {
+    const { data: user, error: findError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('email', email.toLowerCase().trim())
+      .single();
+
+    if (findError || !user) {
+      // Return 200 anyway for security (don't reveal if email exists)
+      return res.json({ message: 'If an account exists, a request has been sent to the admin.' });
+    }
+
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({ reset_requested: true })
+      .eq('id', user.id);
+
+    if (updateError) throw updateError;
+
+    res.json({ message: 'If an account exists, a request has been sent to the admin.' });
+  } catch (err) {
+    console.error('Request reset error:', err);
+    res.status(500).json({ error: 'Failed to process request' });
+  }
+});
+
 // ─────────────────────────────────────────────────────────────
 // AUTHENTICATED ROUTES
 // ─────────────────────────────────────────────────────────────
@@ -142,7 +179,7 @@ router.get('/users', requireAuth, requireAdmin, async (req, res) => {
   try {
     let query = supabase
       .from('users')
-      .select('id, full_name, email, role, status, created_at')
+      .select('id, full_name, email, role, status, reset_requested, created_at')
       .order('created_at', { ascending: false });
 
     if (status) query = query.eq('status', status);
@@ -310,6 +347,37 @@ router.get('/users/:id/inspect', requireAuth, requireAdmin, async (req, res) => 
   } catch (err) {
     console.error('Inspect user error:', err);
     res.status(500).json({ error: 'Failed to inspect user' });
+  }
+});
+
+/**
+ * POST /api/auth/users/:id/reset-password
+ * Admin can reset a user's password. Clears the reset_requested flag.
+ */
+router.post('/users/:id/reset-password', requireAuth, requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  const newPassword = Math.random().toString(36).slice(-8); // Generate 8-char random password
+  
+  try {
+    const hash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+    const { data: user, error } = await supabase
+      .from('users')
+      .update({ password: hash, reset_requested: false })
+      .eq('id', id)
+      .select('id, full_name, email')
+      .single();
+
+    if (error) throw error;
+    
+    res.json({ 
+      message: 'Password reset successful', 
+      user, 
+      newPassword 
+    });
+  } catch (err) {
+    console.error('Reset password error:', err);
+    res.status(500).json({ error: 'Failed to reset password' });
   }
 });
 

@@ -15,7 +15,7 @@ async function showAdmin() {
     { label: 'Admin Panel',  action: null },
   ]);
 
-  let pendingUsers = 0, pendingFiles = 0, pendingAnns = 0, totalUsers = 0;
+  let pendingUsers = 0, pendingFiles = 0, pendingAnns = 0, totalUsers = 0, pendingResets = 0;
   try {
     const [users, stats, allUsers, anns] = await Promise.all([
       api('/auth/users?status=pending'),
@@ -27,6 +27,9 @@ async function showAdmin() {
     pendingFiles = stats.pending;
     pendingAnns  = anns.length;
     totalUsers   = allUsers.length;
+    
+    // Calculate pending resets from allUsers
+    pendingResets = allUsers.filter(u => u.reset_requested).length;
   } catch { /* silent */ }
 
   let h = `
@@ -39,6 +42,9 @@ async function showAdmin() {
       </button>
       <button class="admin-tab ${adminTab === 'announcements' ? 'active' : ''}" onclick="switchAdminTab('announcements')">
         📢 Announce Approvals ${pendingAnns > 0 ? `<span class="tab-badge">${pendingAnns}</span>` : ''}
+      </button>
+      <button class="admin-tab ${adminTab === 'resets' ? 'active' : ''}" onclick="switchAdminTab('resets')">
+        🔑 Password Resets ${pendingResets > 0 ? `<span class="tab-badge">${pendingResets}</span>` : ''}
       </button>
       <button class="admin-tab ${adminTab === 'all-users' ? 'active' : ''}" onclick="switchAdminTab('all-users')">
         👥 All Users <span class="tab-badge tab-badge-muted">${totalUsers}</span>
@@ -66,6 +72,7 @@ async function renderAdminTab() {
   if (adminTab === 'users') await renderPendingUsers(c);
   else if (adminTab === 'files') await renderPendingFiles(c);
   else if (adminTab === 'announcements') await renderPendingAnnouncements(c);
+  else if (adminTab === 'resets') await renderResetRequests(c);
   else if (adminTab === 'all-users') await renderAllUsers(c);
   else if (adminTab === 'create-user') renderCreateUser(c);
 }
@@ -190,6 +197,52 @@ async function rejectAnnouncement(annId) {
     showToast('Announcement rejected and deleted', 'warning');
     showAdmin();
   } catch (err) { showToast(err.message, 'danger'); }
+}
+
+// ─── Password Resets ─────────────────────────────────────────
+
+async function renderResetRequests(container) {
+  container.innerHTML = skeletonList(3);
+  try {
+    const users = await api('/auth/users');
+    const resets = users.filter(u => u.reset_requested);
+
+    if (!resets.length) {
+      container.innerHTML = `<div class="empty"><div class="empty-icon">✓</div><div class="empty-text">No pending password resets</div></div>`;
+      return;
+    }
+
+    let h = `<div class="pending-header"><div class="section-title">Password Reset Requests</div><span class="pending-count">${resets.length} awaiting</span></div><div class="file-list">`;
+    resets.forEach((u, i) => {
+      h += `
+        <div class="file-row" style="animation-delay:${i * 50}ms">
+          <div class="user-avatar-sm">${(u.full_name || 'U')[0].toUpperCase()}</div>
+          <div class="file-info">
+            <div class="file-name">${u.full_name}</div>
+            <div class="file-meta">${u.email}</div>
+          </div>
+          <div class="file-actions">
+            <button class="btn btn-warning btn-sm" onclick="handlePasswordReset('${u.id}', '${u.full_name.replace(/'/g, "\\'")}')">🔑 Reset Password</button>
+          </div>
+        </div>`;
+    });
+    container.innerHTML = h + '</div>';
+  } catch (err) {
+    container.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">${err.message}</div></div>`;
+  }
+}
+
+async function handlePasswordReset(userId, name) {
+  const yes = await showModal('Reset Password', `Are you sure you want to reset the password for ${name}?`, 'Reset', true);
+  if (!yes) return;
+
+  try {
+    const res = await api(`/auth/users/${userId}/reset-password`, { method: 'POST' });
+    prompt(`Password has been reset for ${name}. Copy output below and send it to them!`, res.newPassword);
+    showAdmin(); // Refresh tab
+  } catch (err) {
+    showToast(err.message, 'danger');
+  }
 }
 
 // ─── All Users ───────────────────────────────────────────────

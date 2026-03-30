@@ -203,16 +203,27 @@ function logout() {
 
 // ─── Forgot Password (Simple flow) ──────────────────────────
 
-function sendReset() {
+async function sendReset() {
   const email = id('resetEmail').value.trim();
   if (!email || !email.includes('@')) {
     showMsg('forgotMsg', 'Please enter a valid email address.', 'error');
     return;
   }
-  // In this simple auth system, we just show a message
-  id('sentToEmail').textContent     = email;
-  id('forgotStep1').style.display   = 'none';
-  id('forgotStep2').style.display   = 'block';
+  
+  try {
+    const res = await fetch(API_URL + '/auth/request-reset', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    
+    id('sentToEmail').textContent     = email;
+    id('forgotStep1').style.display   = 'none';
+    id('forgotStep2').style.display   = 'block';
+  } catch (err) {
+    showMsg('forgotMsg', 'Failed to send request. Try again later.', 'error');
+  }
 }
 
 // ─── Init on page load ──────────────────────────────────────
