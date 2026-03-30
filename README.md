@@ -1,5 +1,6 @@
 # 🎓 CS Portal — COMSATS University Islamabad
 ### BCS Program · 8 Semesters
+**Developed by YAHYA AND NUMAN**
 
 A robust, full-stack academic resource portal for browsing, uploading, and managing course materials, exam past papers, and announcements. It features a role-based approval workflow, Google Drive integration for scalable storage, and a modern glassmorphism UI.
 
@@ -120,3 +121,4 @@ UPDATE users SET role = 'admin', status = 'approved' WHERE email = 'YOUR_EMAIL_H
 ## 🎓 Managing Semesters
 
 To update courses or activate a new semester, simply edit the `semesters` array located in `client/js/data.js`. Change `active: false` to `active: true` and populate the `subjects` array!
+
