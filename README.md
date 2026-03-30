@@ -1,86 +1,122 @@
-# CS Portal — COMSATS University
-### BCS Program · Spring 2026
+# 🎓 CS Portal — COMSATS University Islamabad
+### BCS Program · 8 Semesters
 
-A student academic resource portal for browsing, uploading, and managing course materials with an admin approval workflow.
+A robust, full-stack academic resource portal for browsing, uploading, and managing course materials, exam past papers, and announcements. It features a role-based approval workflow, Google Drive integration for scalable storage, and a modern glassmorphism UI.
 
 ---
 
-## Folder Structure
+## 🚀 Key Features
 
-```
+*   📅 **8-Semester Architecture**: Easily switch between semesters. Analytics and content update dynamically based on the active semester.
+*   📝 **Dedicated Exam Centre**: Completely decoupled from regular course materials. Includes specific categories for Mid-Term Papers, Final Papers, Quizzes, and Solved Papers.
+*   📢 **Announcement Board**: Priority-based notifications (Urgent, Important, Normal) with deadline countdown timers and pinning functionality.
+*   🛡️ **Advanced Admin Panel**: 5-tab control center to manage user registration requests, file upload approvals, announcement moderation, and full user inspection (view their uploads/activity).
+*   ☁️ **Google Drive Integration**: 15GB of scalable, free cloud storage. Uploads are streamed directly to Drive while metadata is tracked safely in Supabase.
+*   ✨ **Premium UI/UX**: Dark mode by default, glassmorphic cards, seamless XHR progress bars, dynamic particle canvases, and mobile-responsive drawer navigation.
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend** | Vanilla HTML, CSS, JavaScript (No frameworks) |
+| **Backend** | Node.js, Express.js |
+| **Database** | Supabase (PostgreSQL) |
+| **Storage** | Google Drive API |
+| **Authentication** | Custom JWT + bcryptjs (Manual Admin Approval) |
+| **Security** | Helmet, Express Rate Limiting |
+
+---
+
+## 📂 Folder Structure
+
+```text
 cs-portal/
-├── index.html          ← main HTML (markup only)
-├── css/
-│   └── main.css        ← all styles + design tokens
-├── js/
-│   ├── data.js         ← global state + subjects/folders data
-│   ├── utils.js        ← id(), showToast(), updateCount()
-│   ├── nav.js          ← goHome(), goBack(), breadcrumbs
-│   ├── render.js       ← renderSubjects(), renderFiles(), searchFiles()
-│   ├── files.js        ← upload(), approve(), reject()
-│   ├── admin.js        ← showAdmin(), approveAdmin(), rejectAdmin()
-│   └── auth.js         ← login(), logout(), forgot/reset password
-└── .gitignore
+├── client/                     ← Frontend Assets
+│   ├── css/
+│   │   └── main.css            ← All styles, design tokens, glassmorphism
+│   ├── js/
+│   │   ├── admin.js            ← Admin panel logic (users, files, roles, inspect)
+│   │   ├── announcements.js    ← Deadlines, creation, pinning, dashboard widgets
+│   │   ├── auth.js             ← Login, signup, JWT session management
+│   │   ├── data.js             ← Global state (8 Semesters, Subjects, Folders)
+│   │   ├── exam.js             ← Exam centre specific logic
+│   │   ├── files.js            ← Drag & drop uploads, Drive XHR progress
+│   │   ├── nav.js              ← Semester switching, routing, mobile sidebar
+│   │   ├── particles.js        ← Canvas background animations
+│   │   ├── render.js           ← UI generation, search logic, dynamic views
+│   │   └── utils.js            ← Helpers, toast notifications, formatting
+│   └── index.html              ← Single Page Application layout
+│
+└── server/                     ← Backend API
+    ├── middleware/
+    │   └── auth.js             ← JWT verification & Role guards
+    ├── routes/
+    │   ├── announcements.js    ← REST API for broadcasts
+    │   ├── auth.js             ← Registration, Authentication, User Management
+    │   └── files.js            ← File uploads, listing, stats, deletion
+    ├── utils/
+    │   ├── drive.js            ← Google Drive OAuth2 & File API
+    │   └── supabase.js         ← PostgreSQL connection pool
+    ├── index.js                ← Express server setup & routing
+    └── schema.sql              ← Database structure (Tables, Enums, Indexes)
 ```
 
 ---
 
-## Current Credentials (frontend-only / demo)
+## 🔧 Installation & Setup
 
-| Role    | Email             | Password   |
-|---------|-------------------|------------|
-| Admin   | admin@gmail.com   | anything   |
-| Student | any other email   | anything   |
+### 1. Database (Supabase)
+1. Create a new Supabase project.
+2. Go to the SQL Editor and execute the entire contents of `server/schema.sql` to generate the new `users`, `files`, and `announcements` tables.
 
----
+### 2. Environment Variables
+Create a `.env` file in the `server/` directory:
+```env
+# Supabase
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
 
-## How to Run (Frontend Only)
+# Google Drive API
+GOOGLE_CLIENT_ID=your_gcp_client_id
+GOOGLE_CLIENT_SECRET=your_gcp_client_secret
+GOOGLE_REDIRECT_URI=https://developers.google.com/oauthplayground
+GOOGLE_REFRESH_TOKEN=your_oauth_refresh_token
+GOOGLE_DRIVE_FOLDER_ID=your_target_folder_id
 
-Just open `index.html` in a browser. No build tools needed.
+# Security
+JWT_SECRET=your_super_secret_jwt_string
+PORT=5000
+```
 
-For local development with live reload:
+### 3. Run the App
+
+Install backend dependencies and run the server:
 ```bash
-npx serve .
-# or
-npx live-server
+cd server
+npm install
+npm run dev
 ```
 
----
-
-## Backend Integration Points
-
-Each JS file has `TODO` comments marking exactly where API calls replace the current in-memory logic:
-
-| File       | What to replace                          | Endpoint (planned)             |
-|------------|------------------------------------------|--------------------------------|
-| `auth.js`  | `login()` — hardcoded role check         | `POST /api/auth/login`         |
-| `auth.js`  | `logout()` — page reload                 | `POST /api/auth/logout`        |
-| `auth.js`  | `sendReset()` — simulated email          | `POST /api/auth/forgot-password` |
-| `files.js` | `upload()` — push to in-memory array     | `POST /api/files/upload`       |
-| `files.js` | `approve/reject()` — mutate array        | `PATCH /api/files/:id/status`  |
-| `render.js`| `renderFiles()` — filter `files[]`       | `GET /api/files?subject=&folder=` |
-| `render.js`| `searchFiles()` — client-side filter     | `GET /api/files/search?q=`     |
+The server will start at `http://localhost:5000` and automatically serve the frontend client.
 
 ---
 
-## Adding a New Subject
+## 👑 Bootstrapping the First Admin
 
-In `js/data.js`, push to the `subjects` array:
+Because the application relies on an approval-based registration system, your first account will be stuck in a "pending" state. To grant yourself admin access:
 
-```js
-{ name: "Your Subject", icon: "🎯", color: "rgba(99,102,241,0.15)" }
+1. Go to `http://localhost:5000` and click "Sign Up".
+2. Register your account.
+3. Open your **Supabase SQL Editor** and run:
+```sql
+UPDATE users SET role = 'admin', status = 'approved' WHERE email = 'YOUR_EMAIL_HERE';
 ```
-
-No other changes needed.
+4. Log in! You will now see the Admin Panel in the sidebar.
 
 ---
 
-## Tech Stack
+## 🎓 Managing Semesters
 
-| Layer    | Tech                        |
-|----------|-----------------------------|
-| Frontend | Vanilla HTML + CSS + JS     |
-| Hosting  | Vercel                      |
-| Backend  | Node.js + Express (planned) |
-| Database | PostgreSQL (planned)        |
-| Storage  | TBD                         |
+To update courses or activate a new semester, simply edit the `semesters` array located in `client/js/data.js`. Change `active: false` to `active: true` and populate the `subjects` array!
