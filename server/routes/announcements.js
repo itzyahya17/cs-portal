@@ -56,9 +56,9 @@ router.get('/', requireAuth, async (req, res) => {
   try {
     let query = supabase
       .from('announcements')
-      .select('*, author:created_by(full_name, email, role)')
+      .select('*, author:users!created_by(full_name, email, role)')
       .order('pinned', { ascending: false })
-      .order('created_at', { ascending: false });
+      .order('priority', { ascending: false });
 
     if (semester) query = query.eq('semester', parseInt(semester));
     if (category) query = query.eq('category', category);
@@ -96,7 +96,7 @@ router.patch('/:id', requireAuth, requireAdmin, async (req, res) => {
       .from('announcements')
       .update(updates)
       .eq('id', id)
-      .select('*, author:created_by(full_name, email, role)')
+      .select('*, author:users!created_by(full_name, email, role)')
       .single();
 
     if (error) throw error;

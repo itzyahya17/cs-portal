@@ -72,7 +72,7 @@ router.get('/', requireAuth, async (req, res) => {
   try {
     let query = supabase
       .from('files')
-      .select('*, uploader:uploaded_by(full_name, email)')
+      .select('*, uploader:users!uploaded_by(full_name, email)')
       .order('pinned', { ascending: false })
       .order('created_at', { ascending: false });
 
