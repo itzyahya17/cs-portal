@@ -15,9 +15,10 @@ CREATE TABLE users (
   full_name   text NOT NULL,
   email       text UNIQUE NOT NULL,
   password    text NOT NULL,
-  role        text DEFAULT 'student'  CHECK (role   IN ('admin', 'teacher', 'student')),
-  status      text DEFAULT 'pending'  CHECK (status IN ('pending', 'approved', 'rejected')),
-  created_at  timestamptz DEFAULT now() NOT NULL
+  role            text DEFAULT 'student'  CHECK (role   IN ('admin', 'teacher', 'student')),
+  status          text DEFAULT 'pending'  CHECK (status IN ('pending', 'approved', 'rejected')),
+  reset_requested boolean DEFAULT false,
+  created_at      timestamptz DEFAULT now() NOT NULL
 );
 
 -- 2. Files (course materials + exam materials)
