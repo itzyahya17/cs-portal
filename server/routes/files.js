@@ -28,7 +28,7 @@ router.post('/upload', requireAuth, upload.single('file'), async (req, res) => {
   }
 
   try {
-    const { url, fileId } = await uploadToDrive(file);
+    const { url, fileId } = await uploadToDrive(file, semester || 1, subject, folder);
 
     const status = (req.user.role === 'admin' || req.user.role === 'teacher')
       ? 'approved' : 'pending';
