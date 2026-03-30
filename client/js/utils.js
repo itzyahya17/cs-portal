@@ -2,7 +2,11 @@
 // UTILITIES — helpers used throughout the app
 // ─────────────────────────────────────────────────────────────
 
-const API_URL = '/api';
+// In production (Netlify), point to your Render backend.
+// In development (localhost), use the local Express server.
+const API_URL = window.location.hostname === 'localhost'
+  ? '/api'
+  : 'https://YOUR-RENDER-APP.onrender.com/api';  // ← Replace after Render deploy
 
 /** Shorthand for getElementById */
 function id(x) { return document.getElementById(x); }
